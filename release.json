@@ -1,0 +1,7 @@
+{
+  "release": "wildblock-pages-preview-1",
+  "date": "2026-11-19",
+  "scope": "Native game + isolated experimental sector preview",
+  "nativeGameProtocolUnchanged": true,
+  "nativeIndependentSectorMultiplayer": false
+}

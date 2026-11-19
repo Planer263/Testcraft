@@ -1,0 +1,76 @@
+WILDBLOCK -- GITHUB PAGES UPLOAD CHECKLIST
+========================================
+Release: GitHub Pages Preview 1
+
+WHAT YOU ARE PUBLISHING
+-----------------------
+* A playable Wildblock static site with existing Shared Expeditions multiplayer.
+* An OPTIONAL isolated sector-authority preview, clearly labeled experimental.
+* Hosting diagnostics and deployment/development documentation.
+* NOT completed native independent-sector 3D multiplayer.
+
+BEFORE UPDATING AN EXISTING SITE
+-------------------------------
+1. Export your game account backup and world backup using the game UI.
+2. Keep the same existing domain/repository/site path. Browser-local data is
+   origin/path dependent; a new URL is not a save migration.
+3. Do NOT clear site data. Keep any existing custom-domain CNAME file and repo
+   settings. This archive does not invent or overwrite your domain configuration.
+4. Keep a copy of your previous site/release for rollback. Do not load new-content
+   world saves in older builds that do not recognize them.
+
+UPLOAD
+------
+1. Extract this ZIP on your computer.
+2. Open the GitHub repository you use for the site.
+3. Upload/commit the extracted FILES AND FOLDERS at the publishing root.
+   Do not upload only the ZIP and do not leave an extra enclosing folder.
+4. Required root files include:
+     index.html
+     .nojekyll                  (hidden file; include it)
+     manifest.json
+     site-check.html
+     site-check.js
+   Keep sector-authority/, java-library/, licenses/, docs/ and companion files.
+5. In repository Settings > Pages:
+     Source: Deploy from a branch
+     Branch: main, or your existing publishing branch
+     Folder: /(root)
+     Save
+   If you deliberately publish from /docs, put the ENTIRE extracted site there;
+   the supplied docs/ folder itself is documentation, not a second game build.
+6. Wait for GitHub's Pages deployment to finish. Use the URL GitHub shows.
+   No npm install, custom backend or local development server is required there.
+
+VERIFY THE LIVE SITE
+--------------------
+1. Open the normal site URL. The existing game/login must appear.
+2. Open Hosting checks and click Run local hosting checks.
+3. Check for missing files, secure-context, storage, Worker and WebGL errors.
+4. Sign in and verify your existing saved world/account is still accessible.
+5. Export another backup after confirming the update works.
+6. Refresh all co-op participants to this release. Native co-op remains Shared
+   Expeditions; the sector preview has not replaced it.
+7. If old markup appears, refresh/hard-refresh. Do NOT clear site storage.
+
+LOCAL PREVIEW (OPTIONAL)
+------------------------
+From the extracted site folder run:
+  python -m http.server 8000
+Then open:
+  http://localhost:8000/
+  http://localhost:8000/site-check.html
+  http://localhost:8000/sector-authority/multi-window.html
+Do not use file:// for account cryptography or room storage.
+
+REALISTIC LIMITS
+----------------
+GitHub Pages hosts HTML/CSS/JavaScript/assets. It does not execute a world server,
+keep a room alive after all browsers close, or provide signaling/TURN services.
+The native game retains its configured PeerJS service. The isolated sector preview
+uses same-profile signaling or manual SDP, not automatic public internet rooms.
+Passing Hosting checks is not a remote-device/network benchmark.
+
+No live GitHub deployment or public-network connectivity was performed for this
+archive. Local checks and their exclusions are in:
+  sector-authority/PAGES-PREVIEW-TESTS.json

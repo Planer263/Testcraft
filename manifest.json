@@ -169,5 +169,22 @@
   "versionedMeshJobs": true,
   "hostAuthoritativeBlockPatches": true,
   "independentPlayerDimensions": false,
-  "independentDistantWindows": false
+  "independentDistantWindows": false,
+  "sectorAuthorityDevelopmentPrototype": {
+    "version": 2,
+    "entrypoint": "sector-authority/multi-window.html",
+    "integratedIntoPlayableGame": false,
+    "testReport": "sector-authority/PAGES-PREVIEW-TESTS.json",
+    "nativeGameIndexUnchanged": true,
+    "sameTabDurableOutbox": true
+  },
+  "pagesRelease": {
+    "id": "wildblock-pages-preview-1",
+    "entrypoint": "index.html",
+    "diagnostics": "site-check.html",
+    "sectorPreview": "sector-authority/multi-window.html",
+    "nativeIndependentSectorMultiplayer": false,
+    "testReport": "sector-authority/PAGES-PREVIEW-TESTS.json",
+    "requiresBuildStep": false
+  }
 }
