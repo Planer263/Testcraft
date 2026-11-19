@@ -1,93 +1,78 @@
-WILDBLOCK: HEARTH & COMPANY — SURVIVAL CO-OP ALPHA
-================================================
-PLAY
-Extract the ENTIRE ZIP. Open index.html in a recent desktop Chrome/Chromium
-browser with WebGL and WebRTC support. No Python, Node, server or install needed.
-All existing graphics, shaded 3D inventory icons, model library, water, shapes
-and Chromebook settings are retained. New worlds are Survival-only.
-Use a 128 world for initial networking tests and lower-memory devices.
+# Wildblock — eight-character PeerJS rooms
 
-PERSONAL VS SHARED
-Personal: 36 inventory slots, hotbar selection, carried stack, crafting grid,
-equipment/offhand, health, hunger, air, XP, advancements, position and bed spawn.
-Shared: terrain/block edits, chests, barrels, furnaces and their slots/fuel/output,
-water, crops, dropped items, time/weather and simulated mobs.
-Survivors start empty; nobody inherits the host inventory. Existing records
-resume under the same survivor name. Names are identities, NOT secure accounts.
-The host save/export stores the shared world and all stored survivor records.
+## Play / GitHub Pages
+Extract this ZIP and upload its CONTENTS to your repository publishing root.
+The game entry is index.html. Keep peer-config.js and the folders alongside it.
+Settings > Pages > Deploy from a branch > your branch > /(root). No build step.
+The existing .nojekyll and relative model-library/editor links are retained.
+You can also open index.html locally for single-player.
 
-LOCAL SURVIVORS
-Open Survivors / Co-op on the title or pause screen (F8 also opens it).
-Choose a unique name and click Use this survivor. In offline mode this switches
-between separate personal inventories in the SAME world with shared containers.
-No split-screen. Export a backup before upgrading/importing existing worlds.
+## Host
+1. Open a Survival world; choose a unique survivor name in Survivors / Co-op.
+2. Leave Custom room code blank for a random code, or enter eight letters/digits.
+3. Click Host room. Wait until the room is open; copy the eight-character code.
+4. Send that code to up to four guests. Keep the host tab/computer awake.
 
-TWO OR MORE COMPUTERS: MANUAL WEBRTC
-1. Everyone extracts the SAME build, opens index.html, and chooses a UNIQUE
-   survivor name via Survivors / Co-op. Avoid punctuation outside spaces, _ or -.
-2. Host creates/loads a Survival world and opens Survivors / Co-op (F8).
-3. Host clicks Create guest invitation and sends ALL generated text to one guest.
-4. Guest pastes it into the input field and clicks Guest: accept pasted invitation.
-5. Guest sends ALL of their generated answer text back to the host.
-6. Host pastes the answer into the input field and clicks Host: accept pasted answer.
-7. Guest waits for Connected, closes the panel and clicks Enter shared Survival world.
-8. Repeat with a NEW invitation for each additional guest. Up to four guests.
+## Join
+1. Use this exact build and choose a different survivor name.
+2. Enter the host's eight-character code and click Join room.
+3. Wait for the host world, close the panel and click Enter shared Survival world.
+No pasted SDP offers, answers, or manual approval step is required.
+The eight characters are case-insensitive; the UI normalizes them to uppercase.
+Random codes exclude easily confused I/O/0/1. Custom codes permit all A-Z/0-9.
 
-There is no signaling website or hosted backend. Copy/paste text supplies
-signaling. Direct connections work best on the same LAN/Wi-Fi; router/firewall/
-client-isolation policies may block them. Optional public STUN uses Google's
-stun.l.google.com:19302 for address discovery; it does NOT supply a relay.
-Cross-internet success is NOT guaranteed. TURN relaying is not implemented.
-Connection text contains network-session/address information: share only with
-the intended trusted players. Keep the host computer and tab open and awake.
+## How it works
+Host creates new Peer('wildblock-hc3-' + CODE, options).
+Guest creates a separate prefixed unique peer ID, then peer.connects to the
+prefixed host ID. Users see only CODE. Survivor names remain separate from
+broker IDs. PeerJS exchanges connection metadata automatically.
+Random room-code collisions retry up to five registrations. A custom-code
+collision gives an error rather than silently choosing or joining another room.
+Ending the room destroys the PeerJS peer and releases its registration.
+A room address is NOT a password or authentication system. Trusted friends only.
 
-CONTAINER CONSISTENCY
-Guest chest/barrel/furnace slot actions go to the host and are applied serially.
-Guests wait for an acknowledgement; they do not optimistically take the same
-stack locally. Inventory acknowledgements are private to that guest. The host
-broadcasts shared container contents. A container must exist and be within
-interaction range. This prevents ordinary simultaneous double withdrawal, but
-this prototype is NOT hardened against malicious clients.
+## Online services / dependencies
+Single-player does not load PeerJS or contact a signaling service.
+Host/Join loads PeerJS 1.5.5 from the pinned cdnjs URL in peer-config.js.
+The SDK is NOT bundled in this ZIP. Internet/CDN access is needed for this load.
+By default, PeerJS uses public PeerServer Cloud for signaling. GitHub Pages
+serves only static files; it does not run the signaling service or game server.
+PeerJS/CDN availability and policies are outside this game's control.
+Public STUN can be enabled for discovery. This game does not configure a TURN
+relay. Restrictive school/hotel/mobile/router networks may prevent a direct
+connection despite valid room IDs. A short code does not solve NAT traversal.
+There is no promise of free infrastructure forever or guaranteed connectivity.
 
-BUILDING, MINING, DROPS AND CREATURES
-Guest block breaking, placement/use, attacks, inventory tosses and dropped-item
-pickup are requested from the host. The host distributes world state. A basic
-Steve-skinned remote survivor model uses the supplied Java texture and existing
-humanoid geometry; no custom player skins/animations or name tags yet.
-155 slab/stair recipes were added when a concrete source material exists.
-Not every added decorative resource is obtainable naturally in this alpha.
+## Optional configuration
+Edit peer-config.js to set a different compatible PeerJS SDK URL, namespace
+prefix or your own PeerServer host/port/path/secure options. All players need
+matching settings. A custom config.iceServers can supply your STUN/TURN servers;
+credentials included in static client files are visible to visitors. Do not
+commit secret long-lived credentials. No hosted backend or TURN server is
+provisioned by this archive.
 
-SAVE / REJOIN
-Host: Export Save regularly. The exported world includes survivor records.
-Rejoin with the SAME name to resume that stored personal inventory. Treat names
-like shared local profiles; no passwords/authentication exist. Do not choose
-someone else's name. Guests cannot autosave over the authoritative host world.
-Guest manual exports are only independent copies, not a synchronized host save.
-After a disconnect the guest pauses until explicitly disconnecting/rejoining.
-Host migration, a lobby directory and dedicated servers are not implemented.
+## Preserved systems / limits
+Personal survivor inventories, host-committed shared-container actions, world
+simulation, water, shapes, 3D GUI icons, Chromebook presets and local saves are
+retained. Hosted saves remain repository-path namespaced. Export a backup before
+upgrading, changing URLs or joining. Hosting does not upload worlds to GitHub.
+Alpha limits: client-reported personal state, no secure accounts/anti-cheat,
+no host migration, partial host-centered AI/simulation and heavy state broadcasts.
+Disconnect ends the room; a new connection requires joining again. Signaling
+reconnect does not restore a lost game connection or lost pending transaction.
+Manual offer/answer-only builds cannot join this protocol version.
+This is not completion of the entire Minecraft-like roadmap.
 
-KNOWN ALPHA LIMITS
-- This is an incremental playable survival/co-op build, not all roadmap updates.
-- Trusted co-op only: clients simulate movement/survival and report personal
-  state; they can cheat. Container commits are host-serialized, not a complete
-  server-authoritative economy or security system. No public-server deployment.
-- No PvP, secure account ownership, bans, encryption management or server tools.
-- Full shared-state broadcasts are relatively bandwidth-heavy. Prefer small
-  rooms/worlds. A single message/snapshot has a 20 MB safety limit.
-- Monster AI, spawning and water activation remain centered on the HOST, not
-  every guest. Guests can attack host-simulated mobs, but mobs do not yet target
-  guests as equivalent authoritative players. Remote areas need more simulation.
-- Menus do not pause a hosted world; player input stops but simulation continues.
-  Host death/background browser throttling can reduce or stop simulation. Keep
-  the host tab visible; there is no background-service or host-migration promise.
-- No shared-inventory backpacks: each player is separate, only world containers
-  are shared. Splits/swaps/shift-transfer use host acknowledgements.
-- Normal shared-state updates are roughly twice/second, so some motion and world
-  changes can appear delayed. Player collision/pushing and interpolation are basic.
-- Session interruptions, closing during a transaction, and long-distance sessions
-  need more testing. Do not use irreplaceable saves without backups.
-- Terrain is still bounded/in-memory, not genuinely infinite or disk-paged.
+## Verification
+See docs/SHORT-ROOM-TESTS.json for measured tests and their limitations.
+Public CDN/cloud connectivity cannot be verified by a local transport test.
+Actual internet operation must be tested from the published site on your network.
 
-TESTS
-See docs/SURVIVAL-COOP-TESTS.json for the actual checks performed.
-Earlier reports apply to their corresponding earlier stages of this project.
+## Rights
+Existing user-supplied Minecraft asset notices remain applicable. This package
+does not grant new rights to publish assets. PeerJS is an external dependency;
+its source/license is linked from the PeerJS website. It is not vendored here.
+
+PeerJS docs: https://peerjs.com/client/api/peer
+Data connection API: https://peerjs.com/client/api/data-connection
+Cloud server: https://peerjs.com/server/cloud

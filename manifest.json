@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Hearth & Company \u2014 Pages Preview 2",
+  "name": "Wildblock: Hearth & Company \u2014 Short-code Rooms",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -57,8 +57,16 @@
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
   },
-  "buildId": "hearth-company-pages-2",
+  "buildId": "hearth-company-peerjs-3",
   "hosting": "Static GitHub Pages; no build step or backend",
-  "coOp": "Manual WebRTC signaling for trusted peers; not a dedicated server",
-  "testStatus": "Testing in progress"
+  "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
+  "testStatus": "Validation pending",
+  "peerJS": {
+    "version": "1.5.5",
+    "bundled": false,
+    "sdkUrl": "https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.5/peerjs.min.js",
+    "configuration": "peer-config.js",
+    "hostIdPrefix": "wildblock-hc3-",
+    "visibleCodeLength": 8
+  }
 }
