@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Color & Crystal — Overworld",
+  "name": "Wildblock: Builder's Workshop",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -26,28 +26,33 @@
     "All roadmap updates are not complete. See RELEASE-NOTES.md for scope and remaining limitations.",
     "No Nether generation/progression is added. Original preexisting content is preserved.",
     "Existing saves keep original terrain; new geodes/tuff/emerald deposits require new terrain-v5 worlds.",
-    "Finite amethyst-shell harvesting, not budding-amethyst growth. See README for gameplay adaptations."
+    "Finite amethyst-shell harvesting, not budding-amethyst growth. See README for gameplay adaptations.",
+    "Frontiers streamed mode is solo-only and uses terrain v6 / height128. Existing finite saves retain terrain versions1\u20135 and height64.",
+    "Infinite-style describes continuous horizontal streaming, not exact Minecraft parity or unlimited browser storage.",
+    "Workshop adds content only: no generator formulas or identifiers changed. No new Nether content.",
+    "Recipe/container-return, connection geometry, lantern/chain placement, pumpkin crop semantics are documented in README.",
+    "Current runtime counts: 634 blocks,729 inventory items,483 crafting recipes. All 60 new recipes tested."
   ],
-  "terrainVersion": 5,
+  "terrainVersion": 6,
   "worldBounds": {
     "width": 128,
     "depth": 128,
     "height": 64
   },
-  "worldGeneration": "Seeded climate biomes, layered terrain, rivers, caves, ravines, ore clusters, biome vegetation",
+  "worldGeneration": "World-coordinate continent/erosion/ridge/climate fields, interpolated density caves, biome vegetation, depth-based ore clusters and sparse features",
   "worldSizes": [
     128,
     256,
     512
   ],
-  "worldHeight": 64,
+  "worldHeight": 128,
   "chunkSize": 16,
   "blockStorageBits": 16,
-  "contentRegistry": "java26.3-overworld-v1",
+  "contentRegistry": "java26.3-workshop-v1",
   "newDecorativeBlocks": 377,
   "javaGeometryBlocks": 506,
   "javaLibrary": "java-library/Asset_Studio.html",
-  "infiniteWorld": false,
+  "infiniteWorld": true,
   "newShapeBlocks": 182,
   "defaultWorldSize": 256,
   "defaultPerformancePreset": "Chromebook",
@@ -60,10 +65,10 @@
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
   },
-  "buildId": "hearth-company-overworld-1",
+  "buildId": "hearth-company-workshop-1",
   "hosting": "Static GitHub Pages; no build step or backend",
   "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
-  "testStatus": "Scoped headless-browser tests passed; see report for exclusions",
+  "testStatus": "Scoped headless-browser validation passed; exclusions in report",
   "peerJS": {
     "version": "1.5.5",
     "bundled": false,
@@ -103,7 +108,7 @@
   "loginBuild": "launch-login-1",
   "accountVaultFormatChanged": false,
   "startupBundled": true,
-  "testReport": "docs/OVERWORLD-TESTS.json",
+  "testReport": "docs/WORKSHOP-TESTS.json",
   "renderBuild": "smooth-sharp-nametags-1",
   "rendering": {
     "frustumCulling": true,
@@ -122,7 +127,22 @@
   ],
   "netherDimension": false,
   "newOverworldSmeltingMappings": 20,
-  "runtimeBlockDefinitions": 606,
-  "runtimeItemDefinitions": 692,
-  "runtimeCraftingRecipes": 423
+  "runtimeBlockDefinitions": 634,
+  "runtimeItemDefinitions": 729,
+  "runtimeCraftingRecipes": 483,
+  "streamedWorld": true,
+  "streamedWorldMode": "Rolling local simulation with global procedural terrain and sparse persistent edits",
+  "streamedModeMultiplayer": false,
+  "legacyWorldHeight": 64,
+  "activeWindowWidth": 256,
+  "baseChunkCacheLimit": 384,
+  "streamedViewDistanceMax": 80,
+  "workshopPlaceableBlocks": 27,
+  "workshopInternalCropBlocks": 1,
+  "workshopItems": 10,
+  "workshopRecipes": 60,
+  "workshopBlockIdRange": [
+    740,
+    767
+  ]
 }

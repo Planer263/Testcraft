@@ -1,41 +1,31 @@
-# Wildblock: Color & Crystal — Overworld Update
+# Wildblock: Builder's Workshop
 
-This is the complete static-site game, not a data-only mod.
+Complete updated static site, based on the attached Frontiers streamed-world release. No new world generation or Nether content is added. Existing terrain generators and streamed-world bookkeeping remain intact.
 
 ## Install
-Export account and world backups first. Replace the contents of your EXISTING GitHub Pages site with this ZIP's contents, keeping index.html and .nojekyll at the site root. Keep the same site URL/path to retain local data access. Refresh after deployment. Do NOT clear browser site data. No npm build is needed.
+Export account/world backups. Extract onto the SAME existing GitHub Pages site, keeping index.html and .nojekyll at root. Refresh. Do NOT clear browser site data. Preserve the origin and path for local accounts and saves. No build step is needed. For localhost testing: python -m http.server 8000. Do not use file:// for encrypted accounts.
 
-For local testing, extract and run `python -m http.server 8000`, then open `http://localhost:8000/`. Use localhost or HTTPS, not file://, for encrypted account support.
+## Content
+27 new placeable blocks and one internal crop block, 10 new non-block items, 60 new crafting recipes. Native block IDs 740–767 are fixed; original IDs and mod allocation 156–254 are unchanged.
 
-## What's new
-- 18 new block entries: all 16 glazed terracotta colors, plus missing light-blue and light-gray terracotta.
-- Four new items: amethyst shards, emeralds, golden carrots, pumpkin pie.
-- 34 new crafting recipes and 20 new smelting mappings.
-- Dyed terracotta crafting for every color, then smelting into matching glazed blocks.
-- Glazed pattern placement orientation, six-face Java-style geometry/UV rotations and persistent direction metadata.
-- New terrain-v5 worlds: calcite-lined amethyst geodes, underground tuff deposits, small emerald veins in hills, including occasional deepslate emerald ore.
-- Wooden pickaxe or better harvests four amethyst shards per amethyst block. Four shards reconstruct one block. Iron pickaxe or better harvests emerald ore.
-- Tuff/polished-tuff/tuff-brick recipes connect to existing stairs/slabs. New chiseled stone/sandstone recipes, deepslate tiles, cracked deepslate processing, cut/smooth sandstone and coarse dirt recipes.
-- Search `overworld` in the item browser to find this release's additions and promoted building content.
-- Release card on the title menu and updated in-game field guide.
+- Clear glass panes and all 16 stained-glass pane colors, with neighbor-connected geometry/collision.
+- Iron bars with the same thin connection logic, separate from glass panes.
+- Standing/hanging iron and copper lantern models from supplied Minecraft assets; level-15 light.
+- Iron/copper chains, vertical or horizontal according to the clicked face, with saved axis.
+- Hay bales, with reversible nine-wheat compression.
+- Light-blue/light-gray stained glass and concrete complete the existing color sets.
+- All 16 concrete colors gain a wet-mix recipe. Two sand + two gravel + dye + water bucket produce four concrete and RETURN the empty bucket. Output/inventory overflow uses existing safe insertion/drop paths.
+- Leather armor and chainmail armor, four pieces each, with slot acceptance, armor reduction and durability.
+- Copper nuggets, reversible nine-to-one with ingots.
+- Pumpkin seeds from pumpkins; plant on farmland, grow for 160 simulation seconds, then harvest/replant through the existing crop system.
+- Search workshop in the item browser; recipe views show returned buckets. In-game guide explains acquisition and adaptations.
 
-## No Nether shortcut
-NO Nether dimension, Nether resource generation, ancient debris progression, netherite gear, new froglights or shroomlight is added. Existing content in the supplied original is not deleted. New geodes use calcite, not basalt, for their outer shell.
+## Explicit adaptations and limits
+This update is Minecraft-inspired, not exact Java parity. Chainmail is craftable from iron chains. Concrete is wet-mixed at a workbench; no new concrete-powder gravity simulation. Pumpkins grow in a regrowing crop plot rather than vanilla adjacent-block stems: right-click mature plants for one pumpkin; breaking mature plants gives one pumpkin and two seeds, immature plants one seed. Glass retains the inherited cutout renderer, not blended transparent tinting. Copper lanterns/chains do not oxidize or wax. Lantern support-dependent breakage and chain-powered physics are not implemented. Existing leather supply is unchanged; no new animals or loot-generator changes were added.
 
-## Existing saves
-Terrain versions 1–4 retain their original generator. The browser test checked an original terrain-v4 save against the new runtime: identical SHA-256 block-array hashes. New crafting/smelting recipes work in existing worlds, but new natural deposits require a new world. All preexisting item keys/block associations are unchanged. Native IDs 700–717 are assigned permanently to this update. Mod slots 156–254 are unchanged.
+No new world is needed for recipes/content. Existing Frontiers infinite-style streaming remains solo-only; finite worlds retain co-op with a new build handshake. All participants must use this release. Do not downgrade new-content saves into older builds. Frontiers generator ID/formulas and sparse ledgers are preserved.
 
-Do not open a new terrain-v5 save in an older game build; older releases do not understand the generator or new blocks. Keep a pre-update backup if rollback matters. All co-op participants must run this same release; the build handshake isolates older registries.
+See docs/WORKSHOP-TESTS.json for current validation and exclusions. Earlier test reports are historical, not reruns. No real two-device multiplayer, public signaling/TURN, hardware FPS or production deployment test is claimed.
 
-## Explicit gameplay adaptations
-- Geodes are finite shell deposits. This release does not implement budding-amethyst cluster growth. Amethyst blocks drop shards rather than intact blocks, and four shards craft one block.
-- Pumpkin pie uses pumpkin + sugar + wheat, shapeless. There is no egg-producing chicken system in this build.
-- Golden carrots restore six hunger; pie restores eight. Separate saturation and potion/status effects are not added.
-- Emeralds support collecting and decorative storage blocks, not villager trading.
-- Tinted-glass crafting is unlocked, but its inherited renderer remains; Java-exact tinted-glass light blocking is not added.
-- No real two-device multiplayer, public signaling/TURN, hardware FPS, or production deployment test is claimed. See docs/OVERWORLD-TESTS.json for the actual validation record.
-
-## Maintenance
-The active content code is embedded in index.html immediately before bootMods(). overworld-content.js is a matching reference companion; do NOT load it again with script src. Seven inline scripts and the original account/login/multiplayer wrapper order are preserved. See docs/OVERWORLD-HANDOFF.md and the original development guide.
-
-Original release documents under docs and other release notes are historical and may describe earlier build IDs or counts. This README and the Overworld test report describe this release. Supplied license notices remain included.
+## Development
+workshop-content.js is a reference companion; active code is inline before bootMods() in index.html. Do not load it a second time. The seven-script account/login wrapper order is unchanged. New crop atlas tiles occupy previously unused pixels; all prior UVs and atlas dimensions remain unchanged. Preserve supplied license notices. The previous Frontiers README is in docs/FRONTIERS-README.md.
