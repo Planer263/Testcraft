@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Hearth & Company \u2014 Short-code Rooms",
+  "name": "Wildblock: Fleece & Fields",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -40,7 +40,7 @@
   "worldHeight": 64,
   "chunkSize": 16,
   "blockStorageBits": 16,
-  "contentRegistry": "java26.3-shapes-v2",
+  "contentRegistry": "java26.3-fleece-v3",
   "newDecorativeBlocks": 377,
   "javaGeometryBlocks": 490,
   "javaLibrary": "java-library/Asset_Studio.html",
@@ -57,16 +57,37 @@
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
   },
-  "buildId": "hearth-company-peerjs-3",
+  "buildId": "hearth-company-fleece-4",
   "hosting": "Static GitHub Pages; no build step or backend",
   "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
-  "testStatus": "Validation pending",
+  "testStatus": "See docs/FLEECE-FIELDS-TESTS.json",
   "peerJS": {
     "version": "1.5.5",
     "bundled": false,
     "sdkUrl": "https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.5/peerjs.min.js",
     "configuration": "peer-config.js",
-    "hostIdPrefix": "wildblock-hc3-",
+    "hostIdPrefix": "wildblock-hc4-",
     "visibleCodeLength": 8
-  }
+  },
+  "visualRelease": "glow-ember-1",
+  "lighting": {
+    "blockLight": "Regional voxel propagation in every preset",
+    "sourceLevels": {
+      "torch": 14,
+      "lava": 15,
+      "burningFurnace": 13
+    },
+    "brightnessDefault": 0.85,
+    "blockLightBoostDefault": 1.18,
+    "warmthDefault": 0.55,
+    "fastMode": "Direct-column skylight plus propagated block light",
+    "qualityMode": "Propagated skylight and block light"
+  },
+  "newFarmBlockItems": 44,
+  "farmBlockIdRange": [
+    633,
+    689
+  ],
+  "addedFarmRecipes": 60,
+  "persistentSheep": true
 }
