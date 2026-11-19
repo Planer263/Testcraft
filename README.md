@@ -1,78 +1,41 @@
-# Wildblock — launch login update
+# Wildblock: Color & Crystal — Overworld Update
 
-## Install on your current GitHub Pages site
-Replace the site's existing index.html with the attached index.html, commit,
-wait for deployment and reload the SAME site URL. If needed, hard-refresh with
-Ctrl+Shift+R / Cmd+Shift+R. Do NOT clear site data: accounts/worlds are local.
-The ZIP contains the complete ready-to-publish site with index.html at its root.
+This is the complete static-site game, not a data-only mod.
 
-## Normal use
-- Returning player: the launch screen shows your last-used account. Type its
-  existing password and press Enter or click Log in. With one account there is
-  no unnecessary account dropdown; with several, select the intended account.
-- First visit: a separate Create account form asks for player name, password
-  (at least 10 characters) and confirmation. Creation also logs you in.
-- Import account backup can restore an existing encrypted identity to another
-  browser/profile, but its original password is still required.
-- Log in opens the title menu. Continue your existing world or create a new one.
-- Sign out / switch account saves the current solo/host state where supported,
-  leaves/ends an active room after confirmation, and returns to the login screen.
-- Reloading or reopening the website requires the password again. Passwords are
-  NOT remembered by game storage; your browser's password manager is separate.
+## Install
+Export account and world backups first. Replace the contents of your EXISTING GitHub Pages site with this ZIP's contents, keeping index.html and .nojekyll at the site root. Keep the same site URL/path to retain local data access. Refresh after deployment. Do NOT clear browser site data. No npm build is needed.
 
-## Existing accounts and items
-Do NOT recreate an existing account. The original encrypted vault format,
-account IDs, signing keys, password derivation and world-profile mapping remain.
-Existing vaults are opened with the SAME password; signing identity is unchanged.
-The login UI never deletes a world, account, inventory or old survivor record.
-Items are still saved per host world under their existing player/account ID.
-Name-only legacy inventories are not silently assigned to a new signed account.
+For local testing, extract and run `python -m http.server 8000`, then open `http://localhost:8000/`. Use localhost or HTTPS, not file://, for encrypted account support.
 
-Browser local storage belongs to an origin/site. A file:// copy, another browser,
-a new hostname or cleared site data will not automatically find the account from
-your previous hosted URL. Use encrypted account backups AND host-world backups.
-This login is an encrypted LOCAL identity, not cloud/email/password-reset service.
-Losing both the usable vault/backup or its password can make recovery impossible.
-The client-side login gate is not a server-side security boundary or anti-cheat.
+## What's new
+- 18 new block entries: all 16 glazed terracotta colors, plus missing light-blue and light-gray terracotta.
+- Four new items: amethyst shards, emeralds, golden carrots, pumpkin pie.
+- 34 new crafting recipes and 20 new smelting mappings.
+- Dyed terracotta crafting for every color, then smelting into matching glazed blocks.
+- Glazed pattern placement orientation, six-face Java-style geometry/UV rotations and persistent direction metadata.
+- New terrain-v5 worlds: calcite-lined amethyst geodes, underground tuff deposits, small emerald veins in hills, including occasional deepslate emerald ore.
+- Wooden pickaxe or better harvests four amethyst shards per amethyst block. Four shards reconstruct one block. Iron pickaxe or better harvests emerald ore.
+- Tuff/polished-tuff/tuff-brick recipes connect to existing stairs/slabs. New chiseled stone/sandstone recipes, deepslate tiles, cracked deepslate processing, cut/smooth sandstone and coarse dirt recipes.
+- Search `overworld` in the item browser to find this release's additions and promoted building content.
+- Release card on the title menu and updated in-game field guide.
 
-## What changed
-The old Unlock button read the password from the Create account row, while errors
-were shown elsewhere in the co-op panel. It has been replaced by a dedicated
-launch login form with immediate inline errors and Enter-key submission.
-The old Unlock/Lock controls and name-only survivor-switch row are removed from
-the visible account UI. In-game account controls now offer account backup and
-Sign out / switch account. Co-op panel text contrast is improved.
+## No Nether shortcut
+NO Nether dimension, Nether resource generation, ancient debris progression, netherite gear, new froglights or shroomlight is added. Existing content in the supplied original is not deleted. New geodes use calcite, not basalt, for their outer shell.
 
-## Startup / black-screen protections retained
-All required game/account/multiplayer/login code is bundled in index.html.
-Title scene generation waits until modules/textures are ready and builds nearby
-meshes progressively. A visible startup/recovery overlay handles script/texture/
-WebGL context errors, with safe graphics and last-local-world export.
-No startup .js network requests are required. PeerJS still loads separately from
-its configured CDN only for Host/Join, and needs internet/signaling service access.
-Reference/editable .js files remain in the ZIP, but the bundled blocks in
-index.html are the runtime source; editing a separate source alone will not
-change this one-file build.
+## Existing saves
+Terrain versions 1–4 retain their original generator. The browser test checked an original terrain-v4 save against the new runtime: identical SHA-256 block-array hashes. New crafting/smelting recipes work in existing worlds, but new natural deposits require a new world. All preexisting item keys/block associations are unchanged. Native IDs 700–717 are assigned permanently to this update. Mod slots 156–254 are unchanged.
 
-## Co-op and Pages
-Create or load a Survival world after logging in, then use Host room / Join room
-and the eight-character PeerJS code. All players need compatible builds/config.
-GitHub Pages serves the website, not a dedicated game/account/signaling server.
-Public service availability and direct internet connectivity are not guaranteed.
-No new TURN relay, cloud account service or complete Minecraft roadmap is added.
-Keep the host awake and export backups regularly. Existing alpha limits remain.
+Do not open a new terrain-v5 save in an older game build; older releases do not understand the generator or new blocks. Keep a pre-update backup if rollback matters. All co-op participants must run this same release; the build handshake isolates older registries.
 
-For a new repository: upload extracted CONTENTS, not the ZIP or an extra wrapper
-folder. Settings > Pages > Deploy from a branch > publishing branch > /(root).
-Keep .nojekyll, the model studio, editor, notices and mods alongside index.html.
+## Explicit gameplay adaptations
+- Geodes are finite shell deposits. This release does not implement budding-amethyst cluster growth. Amethyst blocks drop shards rather than intact blocks, and four shards craft one block.
+- Pumpkin pie uses pumpkin + sugar + wheat, shapeless. There is no egg-producing chicken system in this build.
+- Golden carrots restore six hunger; pie restores eight. Separate saturation and potion/status effects are not added.
+- Emeralds support collecting and decorative storage blocks, not villager trading.
+- Tinted-glass crafting is unlocked, but its inherited renderer remains; Java-exact tinted-glass light blocking is not added.
+- No real two-device multiplayer, public signaling/TURN, hardware FPS, or production deployment test is claimed. See docs/OVERWORLD-TESTS.json for the actual validation record.
 
-## Verification
-See docs/LAUNCH-LOGIN-TESTS.json. Actual Chromium/Web Crypto tests covered first
-signup, confirmation mismatch, mandatory launch gate, wrong-password handling,
-Enter-key login, reload requiring password, original account-ID persistence,
-unchanged encrypted vault bytes, stored inventory restoration, sign-out,
-old-version account compatibility and encrypted backup import into a new profile.
-Public PeerJS Cloud, hardware Chromebook performance and every gameplay path
-were not retested in this focused account-UI update.
+## Maintenance
+The active content code is embedded in index.html immediately before bootMods(). overworld-content.js is a matching reference companion; do NOT load it again with script src. Seven inline scripts and the original account/login/multiplayer wrapper order are preserved. See docs/OVERWORLD-HANDOFF.md and the original development guide.
 
-All existing user-supplied asset rights and license notices remain applicable.
+Original release documents under docs and other release notes are historical and may describe earlier build IDs or counts. This README and the Overworld test report describe this release. Supplied license notices remain included.
