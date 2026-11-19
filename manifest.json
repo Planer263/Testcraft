@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Multiplayer Unbound \u2014 Preview 1",
+  "name": "Wildblock: Multiplayer Unbound \u2014 Launch Login",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -95,5 +95,10 @@
     "unbound-accounts.js",
     "unbound-multiplayer.js"
   ],
-  "protocolVersion": 5
+  "protocolVersion": 5,
+  "loginRequiredAtLaunch": true,
+  "loginBuild": "launch-login-1",
+  "accountVaultFormatChanged": false,
+  "startupBundled": true,
+  "testReport": "docs/LAUNCH-LOGIN-TESTS.json"
 }

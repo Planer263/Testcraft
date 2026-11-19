@@ -1,107 +1,78 @@
-# Wildblock: Multiplayer Unbound — Preview 1
+# Wildblock — launch login update
 
-This update builds on Fleece & Fields and Glow & Ember. It retains farming,
-lighting, water, 3D block icons, Chromebook presets, the editor and model studio.
-Extract the ZIP; index.html stays at the root for GitHub Pages or local play.
-No Python, JAR or build step. Upload the extracted contents, not the ZIP, to
-GitHub Pages. Keep peer-config.js and the two unbound JavaScript modules beside
-index.html. Publish your branch's /(root). All players need this exact build.
+## Install on your current GitHub Pages site
+Replace the site's existing index.html with the attached index.html, commit,
+wait for deployment and reload the SAME site URL. If needed, hard-refresh with
+Ctrl+Shift+R / Cmd+Shift+R. Do NOT clear site data: accounts/worlds are local.
+The ZIP contains the complete ready-to-publish site with index.html at its root.
 
-## Player accounts (portable identities, NOT cloud/email accounts)
-Open Survivors / Co-op (F8). Create an account with a name and a unique passphrase
-of at least 10 characters. Unlock a saved account after reopening the page.
-Your ID is a fingerprint of an ECDSA P-256 public key, NOT your display name.
-Changing the name does not change the ID or select somebody else's inventory.
-Hosts verify possession with signed, expiring per-connection challenges. Guests
-also verify the host's challenge signature and pin the host ID for a known world.
-This is first-use trust, not an external certificate/account authority.
+## Normal use
+- Returning player: the launch screen shows your last-used account. Type its
+  existing password and press Enter or click Log in. With one account there is
+  no unnecessary account dropdown; with several, select the intended account.
+- First visit: a separate Create account form asks for player name, password
+  (at least 10 characters) and confirmation. Creation also logs you in.
+- Import account backup can restore an existing encrypted identity to another
+  browser/profile, but its original password is still required.
+- Log in opens the title menu. Continue your existing world or create a new one.
+- Sign out / switch account saves the current solo/host state where supported,
+  leaves/ends an active room after confirmation, and returns to the login screen.
+- Reloading or reopening the website requires the password again. Passwords are
+  NOT remembered by game storage; your browser's password manager is separate.
 
-The private signing key is encrypted with AES-256-GCM using a salted PBKDF2
-SHA-256 password-derived key (310,000 iterations). The vault is stored locally;
-the unlocked signing key is imported non-extractable and held in memory. The
-passphrase/private key is never sent to peers. These Web Crypto primitives are
-not a claim of independently audited account-system security.
+## Existing accounts and items
+Do NOT recreate an existing account. The original encrypted vault format,
+account IDs, signing keys, password derivation and world-profile mapping remain.
+Existing vaults are opened with the SAME password; signing identity is unchanged.
+The login UI never deletes a world, account, inventory or old survivor record.
+Items are still saved per host world under their existing player/account ID.
+Name-only legacy inventories are not silently assigned to a new signed account.
 
-Export encrypted account backup downloads your identity file. Import that file
-and unlock with the SAME passphrase on another browser/device to use that ID.
-Never send your account backup/passphrase to another player. One signed account
-may be online only once per room. There is no email signup, global username
-reservation, cloud inventory, password reset or automatic cross-device sync.
-If site data is cleared without a backup, or the passphrase is lost, identity
-recovery may be impossible. A short name alone cannot recover the old key.
+Browser local storage belongs to an origin/site. A file:// copy, another browser,
+a new hostname or cleared site data will not automatically find the account from
+your previous hosted URL. Use encrypted account backups AND host-world backups.
+This login is an encrypted LOCAL identity, not cloud/email/password-reset service.
+Losing both the usable vault/backup or its password can make recovery impossible.
+The client-side login gate is not a server-side security boundary or anti-cheat.
 
-## Where inventories stay
-Each HOST WORLD retains its own inventory record keyed to your stable account ID.
-Rejoining that same saved world as the same account resumes its personal slots,
-equipment, carried stack and progression. Different worlds have separate items.
-The host must keep/restore the world save. Your account file is an identity
-backup, NOT a world/inventory backup. Export BOTH account and host-world backups.
+## What changed
+The old Unlock button read the password from the Create account row, while errors
+were shown elsewhere in the co-op panel. It has been replaced by a dedicated
+launch login form with immediate inline errors and Enter-key submission.
+The old Unlock/Lock controls and name-only survivor-switch row are removed from
+the visible account UI. In-game account controls now offer account backup and
+Sign out / switch account. Co-op panel text contrast is improved.
 
-New accounts do not silently claim name-only legacy records. For your current
-local survivor, check the explicit local-migration checkbox when creating an
-account. A host can approve a legacy-to-verified-account transfer in the co-op
-panel, after backing up the world; the destination must be empty. Check the
-fingerprint with the intended friend. Transfers remove the old record.
+## Startup / black-screen protections retained
+All required game/account/multiplayer/login code is bundled in index.html.
+Title scene generation waits until modules/textures are ready and builds nearby
+meshes progressively. A visible startup/recovery overlay handles script/texture/
+WebGL context errors, with safe graphics and last-local-world export.
+No startup .js network requests are required. PeerJS still loads separately from
+its configured CDN only for Host/Join, and needs internet/signaling service access.
+Reference/editable .js files remain in the ZIP, but the bundled blocks in
+index.html are the runtime source; editing a separate source alone will not
+change this one-file build.
 
-## Safer shared inventories / persistence
-Shared actions carry per-account sequence numbers and request IDs. The host
-tracks sequence/revision metadata and a bounded recent-receipt cache in saves.
-Repeating a committed action resynchronizes its result instead of withdrawing
-again. Old poses cannot overwrite a newer shared-action inventory revision.
-Timed-out requests retry the SAME request/sequence, not a fresh withdrawal.
-An unacknowledged action is checkpointed in sessionStorage and can be checked
-after reconnect/reload. This is bounded retry/reconciliation, not universal
-transactional/anti-cheat correctness for every possible gameplay edge case.
+## Co-op and Pages
+Create or load a Survival world after logging in, then use Host room / Join room
+and the eight-character PeerJS code. All players need compatible builds/config.
+GitHub Pages serves the website, not a dedicated game/account/signaling server.
+Public service availability and direct internet connectivity are not guaranteed.
+No new TURN relay, cloud account service or complete Minecraft roadmap is added.
+Keep the host awake and export backups regularly. Existing alpha limits remain.
 
-Host snapshots use IndexedDB with latest/previous records and roughly 10-second
-autosaves, in addition to the existing local save/export system. Shared-action
-acknowledgments wait for the snapshot attempt; failures are surfaced. Browser
-quotas, power loss before commit and storage denial can still lose progress.
-Recover latest browser host save is available in the co-op panel. Browser-local
-storage is NOT a remote server backup. Export regularly; site origins/paths matter.
+For a new repository: upload extracted CONTENTS, not the ZIP or an extra wrapper
+folder. Settings > Pages > Deploy from a branch > publishing branch > /(root).
+Keep .nojekyll, the model studio, editor, notices and mods alongside index.html.
 
-## Hosting / joining / recovery
-Eight-character PeerJS room codes remain. The new namespace prevents mixing
-protocols. Unlock accounts before Host/Join. Hosts remain responsible for the
-world. Status shows connection phase, application ping and save health.
-Unexpected guest disconnects retry up to three times (2/4/8-second delays).
-Rejoin last room is available manually. Reconnection requires the SAME host
-world/account; changed world or pinned-host identity is rejected rather than
-replaying a pending inventory action into the wrong world. Signaling reconnect
-is separate from reconnecting a lost game data connection.
+## Verification
+See docs/LAUNCH-LOGIN-TESTS.json. Actual Chromium/Web Crypto tests covered first
+signup, confirmation mismatch, mandatory launch gate, wrong-password handling,
+Enter-key login, reload requiring password, original account-ID persistence,
+unchanged encrypted vault bytes, stored inventory restoration, sign-out,
+old-version account compatibility and encrypted backup import into a new profile.
+Public PeerJS Cloud, hardware Chromebook performance and every gameplay path
+were not retested in this focused account-UI update.
 
-Heartbeats detect stale connections. Slow world-state transmissions are
-coalesced/skipped while a previous snapshot is in flight or the channel buffer
-is high. This is not yet delta-based chunk networking or a dedicated server.
-
-PeerJS SDK still loads on demand from its configured CDN. Public PeerServer
-Cloud is the default signaling service; internet is required for Host/Join.
-No TURN relay or backend is provisioned. You can configure compatible STUN/TURN
-in peer-config.js, but static credentials are public. Restrictive networks can
-still block direct connections. Public SDK/cloud availability is not guaranteed.
-Single-player does not require these services; account cryptography needs a
-supported secure context (HTTPS/localhost; local-file browser behavior varies).
-
-## Camera / input fixes
-Inventory acknowledgments preserve the local player's position, view angles,
-velocity, grounded/flying state and current hotbar choice. Network-driven
-container closures pause instead of trying to capture the mouse automatically.
-Pointer-lock transitions and focus loss reset stale drag/key input. Mouse spikes
-are filtered/clamped; dragging uses local cursor deltas. Text entry does not
-move the camera. Remote player display positions/angles are interpolated while
-large teleports snap. This does not add predictive movement or smooth every mob.
-
-## Security / scope limits
-Signed identity prevents joining as another account merely by copying a name/ID.
-It does NOT make a peer-hosted static client an authoritative, cheat-proof server.
-Clients still report personal crafting/combat/movement state; hosts control the
-world and can edit saves. No secure public-server moderation, central ban/account
-service, dedicated hosting, always-on server or host migration is implemented.
-The host tab must remain open/awake; background browser throttling still matters.
-First-time host trust and arbitrary site-script/XSS risks are not eliminated.
-
-This is Preview 1, not an assurance that every camera/network bug is fixed or
-that the whole Minecraft-like roadmap is complete. See docs/UNBOUND-TESTS.json
-for tests actually performed and explicit public-service test limitations.
-
-Asset notices remain in licenses/. Review rights before public redistribution.
+All existing user-supplied asset rights and license notices remain applicable.
