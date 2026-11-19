@@ -1,6 +1,6 @@
 {
-  "name": "Wildblock Chromebook + Flowing Water",
-  "entrypoint": "Wildblock.html",
+  "name": "Wildblock: Hearth & Company \u2014 Pages Preview 2",
+  "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
   "base": "User-supplied Wildblock-Modding-Framework.zip",
@@ -22,8 +22,8 @@
     "All runtime game images and fonts are embedded in the game HTML.",
     "No browser-local user saves or installed packages are included.",
     "Custom uploaded block icons do not inject new world atlas textures.",
-    "No LAN/multiplayer hosting.",
-    "New worlds use terrain v4; terrain versions 1-3 dispatch to preserved legacy generator."
+    "New worlds use terrain v4; terrain versions 1-3 dispatch to preserved legacy generator.",
+    "All roadmap updates are not complete. See RELEASE-NOTES.md for scope and remaining limitations."
   ],
   "terrainVersion": 4,
   "worldBounds": {
@@ -56,5 +56,9 @@
     "fullCubes": 195,
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
-  }
+  },
+  "buildId": "hearth-company-pages-2",
+  "hosting": "Static GitHub Pages; no build step or backend",
+  "coOp": "Manual WebRTC signaling for trusted peers; not a dedicated server",
+  "testStatus": "Testing in progress"
 }
