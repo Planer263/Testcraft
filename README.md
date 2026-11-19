@@ -1,31 +1,17 @@
-# Wildblock: Builder's Workshop
+# Wildblock: Green Grass & Smooth Streaming
 
-Complete updated static site, based on the attached Frontiers streamed-world release. No new world generation or Nether content is added. Existing terrain generators and streamed-world bookkeeping remain intact.
+Patch on the supplied Builder's Workshop/Frontiers build. All content, account IDs, block IDs, inventory recipes, terrain formulas and generator identifiers are retained.
+
+## Grass fix
+Legacy grass-top and short-grass aliases pointed at grayscale source masks although colored Java textures were already embedded. They now use the colored tiles. Grass sides are composited with their green overlay, and the grass model uses the same complete six faces in full and Simple Models modes. Dirt stays brown. Embedded UI/held-item aliases are synchronized.
+
+## Streamed loading
+Web Worker generates/prefetches terrain outside the UI thread using the SAME generator functions/content mappings. Blob worker is embedded and requires no network request. Create/Continue/Import UI paths prewarm streamed terrain with visible progress. Nearby origin shifts reuse overlapping voxel/light/height data and GPU chunk buffers; a shader offset translates retained meshes. Only incoming strips are copied/recomputed. Lighting/visible meshing are cooperative jobs advanced across frames; completed meshes replace old geometry. Lighting may refine after terrain appears. Lighting invalidation uses 64-block global cells, not each16-block step. Prefetch begins before the window edge; if not ready, movement stays safely inside loaded terrain rather than generating terrain in the movement callback. Bounded base cache is448 chunks (was384). Edits remain in the existing separate ledger. Worker failure uses incremental main-thread prefetch. Workers/caches are not serialized.
+
+## Limits
+Still the Frontiers rolling-window engine. No zero-hitch or FPS guarantee. Typed-array commits, ledger capture, garbage collection and GPU uploads can cause short stalls. Cooperative budgets are not hard deadlines. Programmatic/internal synchronous loads/teleports remain supported and can be slower than prewarmed UI paths. Worker-unavailable initial loading may pause more. No real Chromebook/public-network/production-deployment benchmark was run.
 
 ## Install
-Export account/world backups. Extract onto the SAME existing GitHub Pages site, keeping index.html and .nojekyll at root. Refresh. Do NOT clear browser site data. Preserve the origin and path for local accounts and saves. No build step is needed. For localhost testing: python -m http.server 8000. Do not use file:// for encrypted accounts.
+Export account/world backups. Replace the SAME site's contents, keeping index.html/.nojekyll at root. Refresh; do NOT clear site data. No new world or destructive conversion required. Keep URL/origin/path. For localhost: python -m http.server 8000. Do not use file:// for encrypted accounts. Streamed worlds remain solo-only. Finite co-op/content build ID unchanged.
 
-## Content
-27 new placeable blocks and one internal crop block, 10 new non-block items, 60 new crafting recipes. Native block IDs 740–767 are fixed; original IDs and mod allocation 156–254 are unchanged.
-
-- Clear glass panes and all 16 stained-glass pane colors, with neighbor-connected geometry/collision.
-- Iron bars with the same thin connection logic, separate from glass panes.
-- Standing/hanging iron and copper lantern models from supplied Minecraft assets; level-15 light.
-- Iron/copper chains, vertical or horizontal according to the clicked face, with saved axis.
-- Hay bales, with reversible nine-wheat compression.
-- Light-blue/light-gray stained glass and concrete complete the existing color sets.
-- All 16 concrete colors gain a wet-mix recipe. Two sand + two gravel + dye + water bucket produce four concrete and RETURN the empty bucket. Output/inventory overflow uses existing safe insertion/drop paths.
-- Leather armor and chainmail armor, four pieces each, with slot acceptance, armor reduction and durability.
-- Copper nuggets, reversible nine-to-one with ingots.
-- Pumpkin seeds from pumpkins; plant on farmland, grow for 160 simulation seconds, then harvest/replant through the existing crop system.
-- Search workshop in the item browser; recipe views show returned buckets. In-game guide explains acquisition and adaptations.
-
-## Explicit adaptations and limits
-This update is Minecraft-inspired, not exact Java parity. Chainmail is craftable from iron chains. Concrete is wet-mixed at a workbench; no new concrete-powder gravity simulation. Pumpkins grow in a regrowing crop plot rather than vanilla adjacent-block stems: right-click mature plants for one pumpkin; breaking mature plants gives one pumpkin and two seeds, immature plants one seed. Glass retains the inherited cutout renderer, not blended transparent tinting. Copper lanterns/chains do not oxidize or wax. Lantern support-dependent breakage and chain-powered physics are not implemented. Existing leather supply is unchanged; no new animals or loot-generator changes were added.
-
-No new world is needed for recipes/content. Existing Frontiers infinite-style streaming remains solo-only; finite worlds retain co-op with a new build handshake. All participants must use this release. Do not downgrade new-content saves into older builds. Frontiers generator ID/formulas and sparse ledgers are preserved.
-
-See docs/WORKSHOP-TESTS.json for current validation and exclusions. Earlier test reports are historical, not reruns. No real two-device multiplayer, public signaling/TURN, hardware FPS or production deployment test is claimed.
-
-## Development
-workshop-content.js is a reference companion; active code is inline before bootMods() in index.html. Do not load it a second time. The seven-script account/login wrapper order is unchanged. New crop atlas tiles occupy previously unused pixels; all prior UVs and atlas dimensions remain unchanged. Preserve supplied license notices. The previous Frontiers README is in docs/FRONTIERS-README.md.
+See docs/SMOOTH-STREAMING-TESTS.json. Earlier reports are historical. Active code is inline in index.html; smooth-streaming.js/frontiers-world.js are reference companions, not script-src additions. Preserve supplied licenses.

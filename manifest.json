@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Builder's Workshop",
+  "name": "Wildblock: Green Grass & Smooth Streaming",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -68,7 +68,7 @@
   "buildId": "hearth-company-workshop-1",
   "hosting": "Static GitHub Pages; no build step or backend",
   "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
-  "testStatus": "Scoped headless-browser validation passed; exclusions in report",
+  "testStatus": "Validation in progress; see scoped report",
   "peerJS": {
     "version": "1.5.5",
     "bundled": false,
@@ -108,8 +108,8 @@
   "loginBuild": "launch-login-1",
   "accountVaultFormatChanged": false,
   "startupBundled": true,
-  "testReport": "docs/WORKSHOP-TESTS.json",
-  "renderBuild": "smooth-sharp-nametags-1",
+  "testReport": "docs/SMOOTH-STREAMING-TESTS.json",
+  "renderBuild": "green-smooth-1",
   "rendering": {
     "frustumCulling": true,
     "indexedQuads": true,
@@ -144,5 +144,10 @@
   "workshopBlockIdRange": [
     740,
     767
-  ]
+  ],
+  "streamChunkCache": 448,
+  "streamGenerationWorker": true,
+  "cooperativeMeshing": true,
+  "cooperativeLighting": true,
+  "overlapMeshReuse": true
 }

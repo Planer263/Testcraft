@@ -2,7 +2,7 @@
 // Frontiers: bounded active simulation, unbounded world-coordinate generation.
 const IW={enabled:false,ox:0,oz:0,cache:new Map(),edits:{},meta:{},pending:{},animals:{},drops:{},explosives:{},seen:{},spawn:null,bed:null,shifts:0,busy:false,ruins:[]};
 const IW_META=['chests','furnaces','crops','blockShapes','blockDirections','waterLevels'];
-function iwReset(on){IW.enabled=on;IW.ox=IW.oz=0;IW.cache.clear();IW.edits={};IW.meta=Object.fromEntries(IW_META.map(k=>[k,{}]));IW.pending={};IW.animals={};IW.drops={};IW.explosives={};IW.seen={};IW.spawn=null;IW.bed=null;IW.shifts=0;IW.busy=false;H=on?128:64;SEA=on?40:17;}
+function iwReset(on){sfWorkerStop();sfCancelJobs();IW.enabled=on;IW.ox=IW.oz=0;IW.cache.clear();IW.edits={};IW.meta=Object.fromEntries(IW_META.map(k=>[k,{}]));IW.pending={};IW.animals={};IW.drops={};IW.explosives={};IW.seen={};IW.spawn=null;IW.bed=null;IW.shifts=0;IW.busy=false;H=on?128:64;SEA=on?40:17;}
 function iwGlobal(x,z){return[x+IW.ox,z+IW.oz];}
 function iwKey(x,y,z){return(x+IW.ox)+','+y+','+(z+IW.oz);}
 function iwInside(x,z,ox=IW.ox,oz=IW.oz){return x>=ox&&z>=oz&&x<ox+W&&z<oz+W;}
@@ -70,7 +70,7 @@ function iwChunk(cx,cz){
   for(let dz=-2;dz<=2;dz++)for(let dx=-2;dx<=2;dx++){put(gx+dx-gx0,cl.h,gz+dz-gz0,iwHash(gx+dx,0,gz+dz,583)<.4?39:38);if(Math.abs(dx)===2&&Math.abs(dz)===2)for(let dy=1;dy<=2;dy++)put(gx+dx-gx0,cl.h+dy,gz+dz-gz0,44);}
   put(gx-gx0,cl.h+1,gz-gz0,31);if(gx>=gx0&&gx<gx0+16&&gz>=gz0&&gz<gz0+16)ruins.push({x:gx,y:cl.h+1,z:gz});
  }
- let result={blocks:B,surf,bio,ruins};IW.cache.set(key,result);while(IW.cache.size>384)IW.cache.delete(IW.cache.keys().next().value);return result;
+ let result={blocks:B,surf,bio,ruins};IW.cache.set(key,result);while(IW.cache.size>448)IW.cache.delete(IW.cache.keys().next().value);return result;
 }
 function iwPrepareNew(){let on=$('worldSize').value==='infinite';if(on&&COOP.role!=='solo')throw Error('Leave co-op before creating a streamed solo world.');iwReset(on);if(on)options.renderDistance=Math.min(options.renderDistance,80);}
 function iwPrepareRestore(s){
@@ -107,16 +107,16 @@ function iwRestoreEntities(){primedTNT=Object.values(IW.explosives).filter(q=>iw
 }
 function iwSeedAnimals(){if(!IW.enabled)return;for(let cz=Math.ceil((IW.oz+12)/64);cz<Math.floor((IW.oz+W-12)/64);cz++)for(let cx=Math.ceil((IW.ox+12)/64);cx<Math.floor((IW.ox+W-12)/64);cx++){let k=cx+','+cz;if(IW.seen[k])continue;IW.seen[k]=1;let gx=cx*64,gz=cz*64,cl=iwClimate(gx,gz);if(cl.h<=SEA+2||[7,8].includes(cl.biome)||iwHash(cx,0,cz,590)>.7)continue;for(let i=0;i<3;i++)spawnMob(i===0?'sheep':'pig',gx-IW.ox+(i-1)*3,gz-IW.oz);}}
 function iwGenerateWindow(){
- seed=seedHash(seedText);
+ seed=seedHash(seedText);sfUseWarmCache();
  if(!IW.spawn){let chosen=null;for(let r=0;r<=2048&&!chosen;r+=32)for(let i=0;i<(r?24:1);i++){let a=i*Math.PI*2/24,x=Math.round(Math.cos(a)*r),z=Math.round(Math.sin(a)*r),cl=iwClimate(x,z);if(cl.h>SEA+3&&cl.h<90&&![7,8].includes(cl.biome)){chosen={x:x+.5,y:cl.h+1.02,z:z+.5};break;}}if(!chosen)chosen={x:.5,y:iwClimate(0,0).h+1.02,z:.5};IW.spawn=chosen;IW.ox=Math.floor((chosen.x-W/2)/16)*16;IW.oz=Math.floor((chosen.z-W/2)/16)*16;}
  for(let c of chunks)if(c)ssReleaseChunk(c);chunks=[];residentChunks.clear();streamKey='';SS.waterKey='';LOCAL_LIGHT.key='';SS.occlusionRevision++;resetWater();blocks.fill(0);skyLevels.fill(0);lampLevels.fill(0);edits={};torches=[];IW.ruins=[];
- for(let cz=0;cz<N;cz++)for(let cx=0;cx<N;cx++){let q=iwChunk(IW.ox/16+cx,IW.oz/16+cz);IW.ruins.push(...q.ruins);for(let z=0;z<16;z++){for(let y=0;y<H;y++){let start=(y*16+z)*16;blocks.set(q.blocks.subarray(start,start+16),index(cx*16,y,cz*16+z));}surface.set(q.surf.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);worldBiomes.set(q.bio.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);}}
- iwApplyLedger();for(let z=0;z<W;z++)for(let x=0;x<W;x++)column(x,z);
+ for(let cz=0;cz<N;cz++)for(let cx=0;cx<N;cx++){let q=iwChunk(IW.ox/16+cx,IW.oz/16+cz);IW.ruins.push(...q.ruins);sfPrepareChunk(q);for(let z=0;z<16;z++){for(let y=0;y<H;y++){let start=(y*16+z)*16;blocks.set(q.blocks.subarray(start,start+16),index(cx*16,y,cz*16+z));skyLevels.set(q.sky.subarray(start,start+16),index(cx*16,y,cz*16+z));lampLevels.set(q.lamp.subarray(start,start+16),index(cx*16,y,cz*16+z));}surface.set(q.surf.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);worldBiomes.set(q.bio.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);tops.set(q.tops.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);meshTops.set(q.meshTops.subarray(z*16,z*16+16),(cz*16+z)*W+cx*16);}}
+ iwApplyLedger();let changed=new Set();for(let k of Object.keys(edits)){let[x,y,z]=waterIndexXYZ(+k);changed.add(x+','+z);}for(let k of changed){let[x,z]=k.split(',').map(Number);column(x,z);sfSeedColumn(x,z);}
  for(let[k,b]of Object.entries(edits))if(b===16){let[x,y,z]=waterIndexXYZ(+k);torches.push({x:x+.5,y:y+.65,z:z+.5,k:key3(x,y,z)});}
  dirty.clear();for(let i=0;i<N*N;i++)dirty.add(i);lightBuilt=false;lightBounds=null;
 }
-function iwShift(dx,dz){if(!IW.enabled||IW.busy)return;iwCapture();IW.busy=true;try{IW.ox+=dx;IW.oz+=dz;p.x-=dx;p.z-=dz;iwGenerateWindow();iwRestoreEntities();iwSeedAnimals();particles=[];hit=null;mine=0;mineAt='';IW.shifts++;updateHUD();}finally{IW.busy=false;}}
-function iwMaybeStream(){if(!IW.enabled||!started||paused||dead||IW.busy)return;options.renderDistance=Math.min(options.renderDistance,80);let margin=112;if(p.x<margin||p.x>W-margin||p.z<margin||p.z>W-margin){let dx=Math.floor((p.x-W/2)/16)*16,dz=Math.floor((p.z-W/2)/16)*16;if(dx||dz)iwShift(dx,dz);}}
+function iwShift(dx,dz){if(IW.enabled&&!IW.busy&&Math.abs(dx)<W&&Math.abs(dz)<W&&sfReady(dx,dz)){sfShift(dx,dz);return;}sfCancelJobs();if(!IW.enabled||IW.busy)return;iwCapture();IW.busy=true;try{IW.ox+=dx;IW.oz+=dz;p.x-=dx;p.z-=dz;iwGenerateWindow();iwRestoreEntities();iwSeedAnimals();particles=[];hit=null;mine=0;mineAt='';IW.shifts++;updateHUD();}finally{IW.busy=false;}}
+function iwMaybeStream(){if(!IW.enabled||!started||dead||IW.busy||SF.loading)return;sfPrefetch();if(paused)return;options.renderDistance=Math.min(options.renderDistance,80);let margin=96;if(p.x<margin||p.x>W-margin||p.z<margin||p.z>W-margin){let dx=Math.floor((p.x-W/2)/16)*16,dz=Math.floor((p.z-W/2)/16)*16;if(!dx&&!dz)return;if(sfReady(dx,dz)){SF.waiting=false;sfShift(dx,dz);}else{sfRequest(sfRegion(dx,dz));SF.waiting=true;p.x=Math.max(20,Math.min(W-20,p.x));p.z=Math.max(20,Math.min(W-20,p.z));}}}
 function iwAfterRestore(){if(IW.enabled){iwRestoreEntities();iwSeedAnimals();}}
 function iwPrepareRespawn(){if(!IW.enabled)return;iwCapture();let t=IW.bed&&IW.edits[IW.bed.x+','+IW.bed.y+','+IW.bed.z]===32?IW.bed:IW.spawn;let nx=Math.floor((t.x-W/2)/16)*16,nz=Math.floor((t.z-W/2)/16)*16;iwShift(nx-IW.ox,nz-IW.oz);}
 function iwWorldDescription(){return IW.enabled?'Streamed world · origin '+IW.ox+', '+IW.oz+' · active cache '+IW.cache.size+' chunks · 128-block height':'Bounded chunk world: '+W+' × '+H+' × '+W;}
