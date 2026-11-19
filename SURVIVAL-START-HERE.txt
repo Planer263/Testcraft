@@ -1,0 +1,10 @@
+HEARTH & COMPANY — SURVIVAL ALPHA
+
+Extract the whole ZIP and open Wildblock.html. Existing graphics, models,
+3D inventory icons and Chromebook options are retained. New worlds are Survival.
+Use Survivors / Co-op on the title screen to choose a named survivor.
+Each survivor has separate inventory, equipment, health, hunger, XP and bed
+spawn. World chests, barrels and furnaces are shared. Local survivor switching
+is implemented; networking is under construction in this intermediate package.
+Export backups: the host/local world save stores the survivor records.
+Not a complete implementation of the entire proposed roadmap.
