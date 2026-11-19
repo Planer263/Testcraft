@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Fleece & Fields",
+  "name": "Wildblock: Multiplayer Unbound \u2014 Preview 1",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -57,10 +57,10 @@
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
   },
-  "buildId": "hearth-company-fleece-4",
+  "buildId": "hearth-company-unbound-5",
   "hosting": "Static GitHub Pages; no build step or backend",
   "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
-  "testStatus": "See docs/FLEECE-FIELDS-TESTS.json",
+  "testStatus": "Validation pending",
   "peerJS": {
     "version": "1.5.5",
     "bundled": false,
@@ -89,5 +89,11 @@
     689
   ],
   "addedFarmRecipes": 60,
-  "persistentSheep": true
+  "persistentSheep": true,
+  "accountType": "Portable encrypted public-key identities; no cloud accounts",
+  "modules": [
+    "unbound-accounts.js",
+    "unbound-multiplayer.js"
+  ],
+  "protocolVersion": 5
 }
