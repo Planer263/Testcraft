@@ -41,6 +41,7 @@ function ubProfile(s,id,name){if(!s||typeof s!=='object')throw Error('Missing pl
 }
 function ubCurrentProfile(id){let s=survivorProfiles[id],meta=ubMeta(id);return {...s,inventoryRevision:meta.revision,networkSequence:meta.lastSeq};}
 async function unboundCommitAck(c,m,result,error){let meta=ubMeta(c.id),key=c.id+':'+m.seq;meta.lastSeq=m.seq;meta.revision++;survivorProfiles[c.id]={...result,id:c.id,name:c.name,inventoryRevision:meta.revision,networkSequence:meta.lastSeq};meta.recent.push({seq:m.seq,request:m.request,error:error||null});meta.recent=meta.recent.slice(-64);
+ gfFlushPatches();
  let durable=true;try{await ubSnapshot();}catch(e){durable=false;coopStatus('Host snapshot failed. Export a world backup immediately.');}
  try{await coopSend(c,{t:'ack',request:m.request,profile:ubCurrentProfile(c.id),error,durable});coopHostPush();}catch(e){coopStatus(e.message);}finally{UNBOUND.inflight.delete(key);c.processing=false;}
 }
@@ -73,16 +74,19 @@ async function ubReceive(c,m){if(!m||typeof m!=='object')return;c.lastHeard=perf
  await coopSend(c,{t:'init',worldId:COOP.worldId,world:coopServerWorld(profile),profile,hostAccount:UB_ACCOUNT.current.id});coopStatus(c.name+' verified and joined. Inventory belongs to this account in this world.');survivorUI();ubSnapshot().catch(()=>{});
  }finally{c.authWorking=false;}return;}
  if(!c.verified)return;
+ if(m.t==='chat'){roomChatHost(c,m);return;}
  if(m.t==='pose'&&m.profile){let meta=ubMeta(c.id),next=ubProfile(m.profile,c.id,c.name);if(next.inventoryRevision===meta.revision&&!c.processing)survivorProfiles[c.id]={...next,inventoryRevision:meta.revision,networkSequence:meta.lastSeq};else if(survivorProfiles[c.id])survivorProfiles[c.id].player=next.player;COOP.remote.set(c.id,{id:c.id,name:c.name,...next.player});return;}
  if(m.t==='action'){coopHostAction(c,m);return;}
  }
  if(COOP.role==='client'){
+ if(m.t==='chatMessage'||m.t==='chatNotice'){roomChatReceive(c,m);return;}
+ if(m.t==='blockPatch'){gfReceivePatch(c,m);return;}
  if(m.t==='accountChallenge'){
  let a=UB_ACCOUNT.current,payload=m.payload;if(!a||!payload||payload.protocol!==SHORT_BUILD||payload.guest!==a.id||payload.room!==SHORT_ROOM.code||payload.expires<Date.now()||payload.expires>Date.now()+30000)throw Error('Invalid room account challenge.');let text=JSON.stringify(payload);
  if(await ubAccountId(m.hostPublic)!==payload.host||!await ubVerify(m.hostPublic,text,m.hostSignature))throw Error('Host identity proof failed.');if(UNBOUND.expectedWorld&&payload.worldId!==UNBOUND.expectedWorld)throw Error('The room now contains a different world. Join manually rather than replaying inventory actions.');
  let known={};try{known=JSON.parse(localStorage.getItem('wildblock-unbound-known-hosts')||'{}');}catch(e){}if(known[payload.worldId]&&known[payload.worldId]!==payload.host)throw Error('The saved world host identity changed. Ask the original host to unlock their account.');c.hostIdentity=payload.host;c.challengeWorld=payload.worldId;c.hostPins=known;ubPhase('Verifying account');await coopSend(c,{t:'accountProof',signature:await ubSign(text)});return;}
  if(m.t==='init'){
- if(!c.hostIdentity||m.hostAccount!==c.hostIdentity||m.worldId!==c.challengeWorld||m.profile?.id!==UB_ACCOUNT.current?.id)throw Error('Unverified world snapshot rejected.');ubPhase('Loading host world');ubBaseReceive(c,m);if(!COOP.ready)return;
+ if(!c.hostIdentity||m.hostAccount!==c.hostIdentity||m.worldId!==c.challengeWorld||m.profile?.id!==UB_ACCOUNT.current?.id)throw Error('Unverified world snapshot rejected.');ubPhase('Loading host world');roomChatReset();GF.applied=0;ubBaseReceive(c,m);if(!COOP.ready)return;
  UNBOUND.expectedWorld=m.worldId;UNBOUND.rejoining=false;UNBOUND.retryCount=0;UNBOUND.manual=false;UNBOUND.lastCode=SHORT_ROOM.code;c.lastHeard=performance.now();let pins=c.hostPins||{};pins[m.worldId]=c.hostIdentity;try{localStorage.setItem('wildblock-unbound-known-hosts',JSON.stringify(pins));}catch(e){}
  ubResetInput();UNBOUND.visual.clear();ubPhase('Connected');let pending=ubLoadPending();if(pending&&pending.worldId===m.worldId){UNBOUND.pending=pending;COOP.pending={request:pending.packet.request,at:Date.now(),lastSend:Date.now(),tries:1};coopSend(c,pending.packet).catch(()=>{});coopStatus('Reconnected. Checking the previous action without applying it twice.');}return;}
  if(m.t==='profileResync'){if(!c.hostIdentity||m.profile?.id!==survivorId||COOP.pending)throw Error('Cannot resynchronize this profile right now.');let position={...p};survivorApplyRecord(m.profile);Object.assign(p,position);updateHUD();renderCarried();coopStatus(String(m.reason||'Inventory resynchronized.'));return;}
@@ -97,7 +101,7 @@ coopWire=function(c,channel){ubBaseWire(c,channel);c.lastHeard=performance.now()
  let oldClose=channel.onclose;channel.onclose=()=>{clearTimeout(c.authTimer);let wasClient=COOP.role==='client',wasReady=COOP.ready,room=SHORT_ROOM.code;oldClose?.();ubResetInput();if(COOP.role==='host')save();if(wasClient&&wasReady&&!UNBOUND.manual&&UB_ACCOUNT.current){UNBOUND.lastCode=room;UNBOUND.expectedWorld=COOP.worldId;ubScheduleReconnect();}};
 };
 const ubBaseDisconnect=coopDisconnect;
-coopDisconnect=function(){let rejoining=UNBOUND.rejoining;if(!rejoining){UNBOUND.manual=true;clearTimeout(UNBOUND.retryTimer);}ubBaseDisconnect();ubResetInput();if(rejoining&&!UNBOUND.manual)ubScheduleReconnect();else ubPhase('Disconnected');};
+coopDisconnect=function(){roomChatReset();GF.pending.clear();GF.applied=0;let rejoining=UNBOUND.rejoining;if(!rejoining){UNBOUND.manual=true;clearTimeout(UNBOUND.retryTimer);}ubBaseDisconnect();ubResetInput();if(rejoining&&!UNBOUND.manual)ubScheduleReconnect();else ubPhase('Disconnected');};
 const ubBaseHostRoom=shortHostRoom,ubBaseJoinRoom=shortJoinRoom;
 shortHostRoom=async function(){if(!UB_ACCOUNT.current)throw Error('Log in before hosting.');UNBOUND.manual=false;ubPhase('Opening signaling');try{let code=await ubBaseHostRoom();UNBOUND.lastCode=code;ubPhase('Hosting '+code);return code;}catch(e){ubPhase('Hosting failed');throw e;}};
 shortJoinRoom=async function(){if(!UB_ACCOUNT.current)throw Error('Log in before joining.');if(!UNBOUND.rejoining){UNBOUND.manual=false;UNBOUND.retryCount=0;UNBOUND.expectedWorld='';}ubPhase(UNBOUND.rejoining?'Reconnecting':'Finding room');try{let code=await ubBaseJoinRoom();UNBOUND.lastCode=code;return code;}catch(e){ubPhase('Connection failed');throw e;}};
