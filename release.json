@@ -1,7 +1,6 @@
 {
-  "release": "wildblock-pages-preview-1",
-  "date": "2026-11-19",
-  "scope": "Native game + isolated experimental sector preview",
-  "nativeGameProtocolUnchanged": true,
-  "nativeIndependentSectorMultiplayer": false
+  "release": "wildblock-forests-finishes-3",
+  "date": "2026-11-20",
+  "base": "Wildblock-Smithing-and-Timber-Content-Batch-2.zip",
+  "testReport": "docs/FORESTS-FINISHES-TESTS.json"
 }

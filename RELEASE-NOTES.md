@@ -1,3 +1,24 @@
+# Current: Forests & Finishes — Content Batch 3
+
+See README.md and docs/FORESTS-FINISHES-TESTS.json.
+
+---
+Historical release notes:
+
+# Current: Smithing & Timber — Batch 2
+
+Read SMITHING-AND-TIMBER.md and docs/SMITHING-TIMBER-TESTS.json.
+
+---
+Historical notes:
+
+# Current release: Stonework & Netherite — Content Batch 1
+
+Read STONEWORK-AND-NETHERITE.md and docs/CONTENT-BATCH-1-TESTS.json.
+
+---
+Historical release notes below:
+
 # Wildblock: Smooth & Sharp + Player Nametags
 
 ## Install / use

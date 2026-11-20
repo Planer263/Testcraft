@@ -1,35 +1,71 @@
-# Wildblock — GitHub Pages Preview 1
+# Wildblock: Raised Canopies & High Clouds
 
-UPLOAD-READY STATIC SITE. Root index.html is the playable Wildblock game. Its inline gameplay/authentication/networking scripts and account/save formats are unchanged from Shared Expeditions in the supplied Prototype2 archive. New root controls open Hosting checks and the explicitly experimental sector preview.
+See RAISED-CANOPIES.md for this patch. Biome coverage and limits remain in
+EXPANDED-BIOMES.md. Earlier reports are historical unless explicitly rerun.
 
-IMPORTANT: This does NOT finish native independent-player sector multiplayer. The native game still uses Shared Expeditions: one shared authoritative window and coordinated party dimension travel. The sector preview is a separate furnace-protocol UI with lab identities/inventories. Do not confuse it with native 3D gameplay.
+# Wildblock: Expanded Biomes
 
-## Publish
-See DEPLOY-TO-GITHUB-PAGES.txt. Extract and upload the CONTENTS of this ZIP into the repository's publishing root. Keep index.html and .nojekyll at that root; do not upload the ZIP itself as the website and do not nest everything under another folder. In Settings > Pages choose Deploy from a branch, main (or your publishing branch), /(root), Save. There is no npm/build/server step.
+See EXPANDED-BIOMES.md for installation, coverage, limitations and tests.
+This is biome-generation adaptation coverage, not full Minecraft feature parity.
+Earlier notes below are historical.
 
-Keep the SAME existing origin/domain/repository path if this is an update. Back up accounts and worlds first. Do NOT clear browser site data. Preserve an existing custom-domain CNAME file and your repository settings; no guessed CNAME or credentials are included.
+# Wildblock: Canopy Biomes
 
-## Pages readiness work
-- Relative URLs tested both at site root and under /wildblock/, representing a project-site path.
-- Hosting checks page probes browser capabilities and same-site assets without reading account/save data or contacting external test services.
-- Native game inline scripts compared byte-for-byte with the input release; navigation markup only was changed.
-- Sector requests use a same-tab sessionStorage outbox BEFORE transmission. Lost ACKs or retryable storage errors survive same-tab reload and are resolved by retrying the identical packet against durable server receipts.
-- Single-flight mutation guard prevents a second queued action from slipping past an uncertain request.
-- Sender failures clear pending timers/maps. Local coordinator locking/persistence fencing from v2 is retained.
-- Checksums, deployment instructions, native integration acceptance checklist, current test report and release metadata are included.
+See CANOPY-BIOMES.md for current changes, installation and save compatibility.
+The earlier notes below describe historical builds.
 
-## Play and diagnose
-Open your normal site URL to play. Hosting checks opens site-check.html. The isolated sector preview opens sector-authority/multi-window.html. Its coordinator requires HTTPS/localhost, Web Locks and available local storage. Same-profile automatic connections or manual offer/answer are available; no public signaling or TURN was added to the preview. The normal game retains its existing on-demand PeerJS configuration.
+# Wildblock: Living Biomes
 
-GitHub Pages serves files; it is NOT a persistent world server, signaling service, TURN relay or coordinator host. A browser must remain open as coordinator. Closing/reloading it requires manual reopen/reconnect from its saved lab state; no live migration is implemented. Remote peer/NAT connectivity was not tested or guaranteed.
+See LIVING-BIOMES.md for changes, installation, save compatibility and test limits.
 
-## Sector preview scope
-Independent lab locations/dimensions, shared furnace operations, authority handoff, freezing/restoring vacant sectors, persistent receipts and coordinator recovery are implemented. The lab's session key is NOT a Wildblock account identity. Native terrain validation, 3D window ownership, full carried/equipment/crafting inventory routing, real portal travel, mobs/water/TNT and proximity mesh remain blockers for full native sector play.
+# Wildblock: Forests & Finishes — Content Batch 3
 
-The request outbox and private lab key survive a same-tab reload in sessionStorage, not guaranteed tab closure, browser eviction or clearing site data. Server receipt history remains in the coordinator's lab database. New native integration must use the existing authenticated game-account system, not silently copy lab identity handling.
+Built on supplied Wildblock-Smithing-and-Timber-Content-Batch-2.zip. All Batch 1/2
+walls, netherite gear, real smithing interface, trims, accounts, saves, terrain,
+portals and Shared Expeditions are retained. No unprovided Aquatic build is included.
 
-## Verification
-Current results: sector-authority/PAGES-PREVIEW-TESTS.json. Prior reports are retained as historical records. Current testing uses localhost (root and simulated project path), independent Chromium contexts and actual local WebRTC. No actual GitHub repository deployment/HTTPS origin, physical remote devices, public signaling/TURN or hardware FPS benchmark is claimed.
+## New content
+14 blocks/block-items: acacia, dark oak, mangrove, cherry and pale oak full-bark
+wood, plus crimson/warped hyphae — each with a stripped variant. IDs 950–963.
+4 matching logs/stems in a square ->3 wood/hyphae; 1 ->4 matching planks. Axe-strip
+normal variants. Overworld wood burns as fuel and smelts into charcoal. New Nether
+hyphae intentionally do NEITHER. Native cube grain orientation is retained; new
+pillar-axis metadata is not introduced.
 
-## Source
-Root entrypoint stays index.html. sector-authority/ scripts are isolated from the native game. No external script load or duplicate native wrapper was added. All supplied license notices are retained. No passwords, private keys, accounts or player world backups are included.
+14 working trim templates: Ward, Eye, Vex, Tide, Snout, Rib, Spire, Wayfinder,
+Shaper, Silence, Raiser, Host, Flow, Bolt. Together with Sentry/Dune/Coast/Wild,
+these cover the 18 armor-trim patterns found in the supplied asset catalog.
+They work in the EXISTING smithing screen with all ten existing trim materials.
+Textures appear in the smithing armor preview, inventory player model and remote
+player armor. Trims remain cosmetic and preserve equipment durability damage.
+
+First copies and duplicates use Batch 2's documented FORGING adaptation. Search
+each template in the item browser for its seven-diamond + marker + substrate
+recipe. Duplication consumes 1 template +7 diamonds + substrate to produce 2.
+No structures or structure-loot acquisition have been added. Substrates/markers
+are existing survival resources, not newly introduced Creative-only ingredients.
+
+56 added crafting recipes. Totals: 682 block definitions, 807 inventory entries,
+597 crafting recipes. See docs/FORESTS-FINISHES-CONTENT.json for permanent IDs,
+exact recipes, sources and atlas rectangles. New material-color images adapt the
+supplied trim masks; no claim of exact Java palette/geometry parity is made.
+Old atlas pixels/UVs are retained; 280 new trim textures occupy verified unused
+space within the same 2048x2048 atlas. All 28 original source asset ZIPs were
+available for lookup; only required embedded resources ship with the game.
+
+## Install / GitHub Pages
+Export account/world backups. Extract this ZIP and upload CONTENTS at the existing
+publishing root with index.html and .nojekyll. Keep the same site URL, storage and
+CNAME/domain settings. No new backend or build step. Never clear site data.
+All co-op players must refresh: handshake hearth-company-forests-finishes-3.
+Do not load saves containing new content into an older build.
+
+Root entrypoint: index.html. Wildblock.html redirects to it. Active new content
+is embedded once before c2Register(); forests-finishes.js is reference source,
+NOT a second script to load. Smithing/table/replay/epoch/account safeguards remain.
+No native independent-sector multiplayer, armor toughness/knockback changes,
+new mobs/structures, enchantments or fireproof item entities are added.
+
+Current tests: docs/FORESTS-FINISHES-TESTS.json. Older test reports are historical,
+not reruns. No real GitHub deployment, physical remote-device public-NAT/TURN or
+hardware FPS benchmark is claimed. Supplied license notices are retained.

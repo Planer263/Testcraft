@@ -1,5 +1,5 @@
 {
-  "name": "Wildblock: Shared Expeditions & Keyboard Controls",
+  "name": "Wildblock: Forests & Finishes \u2014 Content Batch 3",
   "entrypoint": "index.html",
   "creator": "Mod_Creator.html",
   "sampleMod": "mods/Gem_Expansion.htminecraft",
@@ -31,7 +31,8 @@
     "Infinite-style describes continuous horizontal streaming, not exact Minecraft parity or unlimited browser storage.",
     "Workshop adds content only: no generator formulas or identifiers changed. No new Nether content.",
     "Recipe/container-return, connection geometry, lantern/chain placement, pumpkin crop semantics are documented in README.",
-    "Current runtime counts: 634 blocks,729 inventory items,483 crafting recipes. All 60 new recipes tested."
+    "Content Batch 1 uses documented native workbench upgrades and wall shapes; not complete Java behavior parity.",
+    "Base is Pages Preview 1, not an unprovided Aquatic or Fields & Fangs build."
   ],
   "terrainVersion": 6,
   "worldBounds": {
@@ -48,7 +49,7 @@
   "worldHeight": 128,
   "chunkSize": 16,
   "blockStorageBits": 16,
-  "contentRegistry": "java26.3-nether-gates-v1",
+  "contentRegistry": "java26.3-forests-finishes-3",
   "newDecorativeBlocks": 377,
   "javaGeometryBlocks": 506,
   "javaLibrary": "java-library/Asset_Studio.html",
@@ -65,10 +66,10 @@
     "slabsAndStairs": 182,
     "testReport": "docs/3D-GUI-ICON-TESTS.json"
   },
-  "buildId": "hearth-company-expedition-1",
+  "buildId": "hearth-company-forests-finishes-3",
   "hosting": "Static GitHub Pages; no build step or backend",
   "coOp": "PeerJS custom eight-character room IDs; automatic signaling",
-  "testStatus": "Scoped tests in progress; see report",
+  "testStatus": "Scoped current results in docs/FORESTS-FINISHES-TESTS.json",
   "peerJS": {
     "version": "1.5.5",
     "bundled": false,
@@ -108,7 +109,7 @@
   "loginBuild": "launch-login-1",
   "accountVaultFormatChanged": false,
   "startupBundled": true,
-  "testReport": "docs/EXPEDITION-TESTS.json",
+  "testReport": "docs/FORESTS-FINISHES-TESTS.json",
   "renderBuild": "green-smooth-1",
   "rendering": {
     "frustumCulling": true,
@@ -127,9 +128,9 @@
   ],
   "netherDimension": true,
   "newOverworldSmeltingMappings": 20,
-  "runtimeBlockDefinitions": 639,
-  "runtimeItemDefinitions": 736,
-  "runtimeCraftingRecipes": 483,
+  "runtimeBlockDefinitions": 682,
+  "runtimeItemDefinitions": 807,
+  "runtimeCraftingRecipes": 597,
   "streamedWorld": true,
   "streamedWorldMode": "Rolling local simulation with global procedural terrain and sparse persistent edits",
   "streamedModeMultiplayer": "shared host window / expedition mode",
@@ -175,16 +176,57 @@
     "entrypoint": "sector-authority/multi-window.html",
     "integratedIntoPlayableGame": false,
     "testReport": "sector-authority/PAGES-PREVIEW-TESTS.json",
-    "nativeGameIndexUnchanged": true,
+    "nativeGameIndexUnchanged": false,
     "sameTabDurableOutbox": true
   },
   "pagesRelease": {
-    "id": "wildblock-pages-preview-1",
+    "id": "wildblock-forests-finishes-3",
     "entrypoint": "index.html",
     "diagnostics": "site-check.html",
     "sectorPreview": "sector-authority/multi-window.html",
     "nativeIndependentSectorMultiplayer": false,
     "testReport": "sector-authority/PAGES-PREVIEW-TESTS.json",
-    "requiresBuildStep": false
+    "requiresBuildStep": false,
+    "contentTestReport": "docs/FORESTS-FINISHES-TESTS.json"
+  },
+  "contentBatch": {
+    "id": 1,
+    "base": "Wildblock-GitHub-Pages-Preview-1.zip",
+    "blocks": 21,
+    "blockItems": 21,
+    "nonBlockItems": 9,
+    "recipes": 33,
+    "blockIdRange": [
+      900,
+      920
+    ],
+    "contentList": "docs/CONTENT-BATCH-1.json",
+    "handoff": "docs/CONTENT-BATCH-1-HANDOFF.md"
+  },
+  "smithingTimber": {
+    "newBlockIds": [
+      930,
+      937
+    ],
+    "newBlocks": 8,
+    "templates": 5,
+    "trimPatterns": 4,
+    "trimMaterials": 10,
+    "smithingTableId": 420,
+    "newCraftingRecipes": 27,
+    "removedCraftingRecipes": 9,
+    "content": "docs/SMITHING-TIMBER-CONTENT.json"
+  },
+  "forestsFinishes": {
+    "base": "Wildblock-Smithing-and-Timber-Content-Batch-2.zip",
+    "blocks": 14,
+    "templates": 14,
+    "newRecipes": 56,
+    "blockIdRange": [
+      950,
+      963
+    ],
+    "trimPatternsSupported": 18,
+    "content": "docs/FORESTS-FINISHES-CONTENT.json"
   }
 }
